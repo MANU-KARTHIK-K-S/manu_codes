@@ -8,29 +8,29 @@ void main()
 {
     char  input[10], binary[12], relocbit, ch, pn[5];
     int start, inp, len, i, address, opcode, addr, actualadd, tlen,add, length;
-    FILE *fp1, *fp2;
+    FILE *reloc_in, *reloc_out;
     printf("\n\n Enter the actual starting address : ");
     scanf("%x", &start);
-    fp1 = fopen("RLIN.txt", "r");
-    fp2 = fopen("RLOUT.txt", "w");
-    fscanf(fp1, "%s", input);
-    fprintf(fp2, " ----------------------------\n");
-    fprintf(fp2, " ADDRESS\tCONTENT\n");
-    fprintf(fp2, " ----------------------------\n");
+    reloc_in = fopen("RLIN.txt", "r");
+    reloc_out = fopen("RLOUT.txt", "w");
+    fscanf(reloc_in, "%s", input);
+    fprintf(reloc_out, " ----------------------------\n");
+    fprintf(reloc_out, " ADDRESS\tCONTENT\n");
+    fprintf(reloc_out, " ----------------------------\n");
     while (strcmp(input, "E") != 0)
     {
         if (strcmp(input, "H") == 0)
         {
-            fscanf(fp1, "%s", pn);
-            fscanf(fp1, "%x", &add);
-            fscanf(fp1, "%x", &length);
-            fscanf(fp1, "%s", input);
+            fscanf(reloc_in, "%s", pn);
+            fscanf(reloc_in, "%x", &add);
+            fscanf(reloc_in, "%x", &length);
+            fscanf(reloc_in, "%s", input);
         }
         if (strcmp(input, "T") == 0)
         {
-            fscanf(fp1, "%x", &address);
-            fscanf(fp1, "%x", &tlen);
-            fscanf(fp1, "%s", bitmask);
+            fscanf(reloc_in, "%x", &address);
+            fscanf(reloc_in, "%x", &tlen);
+            fscanf(reloc_in, "%s", bitmask);
             address += start;
             convert(bitmask);
             len = strlen(bit);
@@ -38,31 +38,31 @@ void main()
                 len = 10;
             for (i = 0; i < len; i++)
             {
-                fscanf(fp1, "%x", &opcode);
-                fscanf(fp1, "%x", &addr);
+                fscanf(reloc_in, "%x", &opcode);
+                fscanf(reloc_in, "%x", &addr);
                 relocbit = bit[i];
                 if (relocbit == '0')
                     actualadd = addr;
                 else
                     actualadd = addr + start;
-                fprintf(fp2, "\n  %x\t\t%x%x\n", address, opcode, actualadd);
+                fprintf(reloc_out, "\n  %x\t\t%x%x\n", address, opcode, actualadd);
                 address += 3;
             }
-            fscanf(fp1, "%s", input);
+            fscanf(reloc_in, "%s", input);
         }
     }
-    fprintf(fp2, " ----------------------------\n");
-    fclose(fp1);
-    fclose(fp2);
-    printf("\n\n The contents of output file(RLOUT.TXT n\n");
-    fp2 = fopen("RLOUT.txt", "r");
-    ch = fgetc(fp2);
+    fprintf(reloc_out, " ----------------------------\n");
+    fclose(reloc_in);
+    fclose(reloc_out);
+    printf("\n\n The contents of output file(RLOUT.TXT) \n");
+    reloc_out = fopen("RLOUT.txt", "r");
+    ch = fgetc(reloc_out);
     while (ch != EOF)
     {
         printf("%c", ch);
-        ch = fgetc(fp2);
+        ch = fgetc(reloc_out);
     }
-    fclose(fp2);
+    fclose(reloc_out);
     //
 }
 void convert(char h[12])
